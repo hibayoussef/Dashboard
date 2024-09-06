@@ -1,0 +1,17 @@
+stages:
+  - deploy_admin
+
+main:
+  stage: deploy_admin
+  tags:
+    - utagup-runner
+  script:
+    - export CI=false
+    - source ~/.bash_profile
+    - nvm use 20.11.1
+    - npm ci
+    - npm run build
+    - sudo rsync -rvz --delete ./build/ /home/react/htdocs/admin.ezeness.com/
+    - sudo chown -R react. /home/react/htdocs/admin.ezeness.com/
+  only:
+    - main
